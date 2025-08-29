@@ -149,10 +149,10 @@ const Discover = () => {
       <div className="lg:hidden fixed top-16 right-4 z-40">
         <button
           onClick={() => setShowMobileSearch(true)}
-          className="bg-red-600 text-white p-3 rounded-full shadow-lg hover:bg-red-700 transition-colors"
+          className="bg-white text-gray-700 p-3 rounded-full shadow-professional hover:shadow-professional-lg transition-all duration-200 border border-gray-100 hover:border-gray-200"
           title="Search Profiles"
         >
-          <Search className="h-5 w-5" />
+          <Search className="h-5 w-5 text-gray-600" />
         </button>
       </div>
 
@@ -167,25 +167,28 @@ const Discover = () => {
             <div className="col-span-12 lg:col-span-8">
               {/* Loading State */}
               {isLoading && (
-                <div className="flex justify-center items-center py-12">
-                  <Loader2 className="h-12 w-12 animate-spin text-red-600" />
+                <div className="flex flex-col justify-center items-center py-16">
+                  <div className="bg-white rounded-2xl shadow-professional p-8 max-w-sm mx-auto">
+                    <Loader2 className="h-10 w-10 animate-spin text-red-600 mx-auto mb-4" />
+                    <p className="text-gray-600 font-medium text-center">Finding amazing profiles...</p>
+                  </div>
                 </div>
               )}
 
               {/* Error State */}
               {error && (
                 <div className="text-center py-12">
-                  <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md mx-auto">
+                  <div className="bg-white rounded-2xl shadow-professional-lg p-8 max-w-md mx-auto border border-gray-100">
                     <X className="h-12 w-12 text-red-500 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
                       Something went wrong
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-gray-600 mb-6 leading-relaxed">
                       We couldn't load profiles right now
                     </p>
                     <button
                       onClick={() => refetch()}
-                      className="bg-red-600 text-white py-3 px-6 rounded-xl font-medium hover:bg-red-700 transition-all"
+                      className="btn-professional bg-red-600 text-white py-3 px-6 rounded-xl font-medium hover:bg-red-700 shadow-professional hover:shadow-professional-lg"
                     >
                       Try Again
                     </button>
@@ -196,17 +199,17 @@ const Discover = () => {
               {/* No Profiles State */}
               {!isLoading && !error && profiles.length === 0 && (
                 <div className="text-center py-12">
-                  <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md mx-auto">
+                  <div className="bg-white rounded-2xl shadow-professional-lg p-8 max-w-md mx-auto border border-gray-100">
                     <Heart className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-3">
                       No profiles available
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-gray-600 mb-6 leading-relaxed">
                       Check back later for new profiles
                     </p>
                     <button
                       onClick={() => refetch()}
-                      className="bg-red-600 text-white py-3 px-6 rounded-xl font-medium hover:bg-red-700 transition-all"
+                      className="btn-professional bg-red-600 text-white py-3 px-6 rounded-xl font-medium hover:bg-red-700 shadow-professional hover:shadow-professional-lg"
                     >
                       Refresh
                     </button>
@@ -220,12 +223,12 @@ const Discover = () => {
                 profiles.length > 0 &&
                 currentProfileIndex >= profiles.length && (
                   <div className="text-center py-12">
-                    <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md mx-auto">
+                    <div className="bg-white rounded-2xl shadow-professional-lg p-8 max-w-md mx-auto border border-gray-100">
                       <Heart className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
                         You've seen all profiles
                       </h3>
-                      <p className="text-gray-600 mb-4">
+                      <p className="text-gray-600 mb-6 leading-relaxed">
                         Check back later for new profiles
                       </p>
                       <button
@@ -233,7 +236,7 @@ const Discover = () => {
                           setCurrentProfileIndex(0);
                           refetch();
                         }}
-                        className="bg-red-600 text-white py-3 px-6 rounded-xl font-medium hover:bg-red-700 transition-all"
+                        className="btn-professional bg-red-600 text-white py-3 px-6 rounded-xl font-medium hover:bg-red-700 shadow-professional hover:shadow-professional-lg"
                       >
                         Start Over
                       </button>
@@ -250,16 +253,16 @@ const Discover = () => {
                   <>
                     {/* Profile Counter - Keep this for user context */}
                     <div className="text-center mb-6">
-                      <p className="text-gray-600">
+                      <p className="text-gray-500 font-medium text-sm tracking-wide">
                         {currentProfileIndex + 1} of {profiles.length}
                       </p>
                     </div>
 
                     {/* Profile Card */}
-                    <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div className="bg-white rounded-2xl shadow-professional-xl overflow-hidden border border-gray-100 card-professional">
                       {/* Profile Image */}
                       <div
-                        className="relative h-72 bg-gray-200 cursor-pointer"
+                        className="relative h-80 bg-gray-100 cursor-pointer group"
                         onClick={() => handleProfileClick(currentProfile)}
                       >
                         {currentProfile.photos &&
@@ -267,10 +270,10 @@ const Discover = () => {
                           <img
                             src={currentProfile.photos[0]}
                             alt={currentProfile.displayName || 'Profile'}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center">
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
                             <Heart className="h-16 w-16 text-gray-400" />
                           </div>
                         )}
@@ -282,24 +285,24 @@ const Discover = () => {
                             handleSkip();
                           }}
                           disabled={currentProfileIndex >= profiles.length - 1}
-                          className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-gray-700 hover:bg-white transition-all p-2 rounded-full shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                          className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm text-gray-700 hover:bg-white transition-all duration-200 p-2.5 rounded-full shadow-professional hover:shadow-professional-lg disabled:opacity-50 disabled:cursor-not-allowed z-10 border border-white/20"
                         >
-                          <SkipForward className="h-4 w-4" />
+                          <SkipForward className="h-4 w-4 text-gray-600" />
                         </button>
 
                         {/* Profile Info Overlay */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6">
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-6">
                           <div className="text-white">
-                            <h2 className="text-2xl font-semibold mb-2">
+                            <h2 className="text-2xl font-bold mb-2 tracking-tight">
                               {currentProfile.displayName ||
                                 `${currentProfile.first_name} ${currentProfile.last_name}`}
                             </h2>
 
                             {/* Age and Location */}
                             {currentProfile.showLocation && (
-                              <div className="flex items-center text-white/90 mb-3">
+                              <div className="flex items-center text-white/95 mb-3">
                                 <MapPin className="h-4 w-4 mr-2" />
-                                <span className="text-sm">
+                                <span className="text-sm font-medium">
                                   {currentProfile.displayLocation ||
                                     `${currentProfile.city}, ${currentProfile.state}`}
                                 </span>
@@ -308,7 +311,7 @@ const Discover = () => {
 
                             {/* Bio Preview */}
                             {currentProfile.bio && (
-                              <p className="text-sm text-white/90 line-clamp-2 mb-3 leading-relaxed">
+                              <p className="text-sm text-white/95 line-clamp-2 mb-4 leading-relaxed font-normal">
                                 {currentProfile.bio}
                               </p>
                             )}
@@ -316,19 +319,19 @@ const Discover = () => {
                             {/* Interests Tags */}
                             {currentProfile.interests &&
                               currentProfile.interests.length > 0 && (
-                                <div className="flex flex-wrap gap-2 mb-4">
+                                <div className="flex flex-wrap gap-2 mb-5">
                                   {currentProfile.interests
                                     .slice(0, 4)
                                     .map((interest: string, index: number) => (
                                       <span
                                         key={index}
-                                        className="px-2 py-1 bg-white/20 backdrop-blur-sm text-white text-xs rounded-full border border-white/30"
+                                        className="px-3 py-1.5 bg-white/25 backdrop-blur-sm text-white text-xs font-medium rounded-full border border-white/40 shadow-sm"
                                       >
                                         {interest}
                                       </span>
                                     ))}
                                   {currentProfile.interests.length > 4 && (
-                                    <span className="px-2 py-1 bg-white/20 backdrop-blur-sm text-white text-xs rounded-full border border-white/30">
+                                    <span className="px-3 py-1.5 bg-white/25 backdrop-blur-sm text-white text-xs font-medium rounded-full border border-white/40 shadow-sm">
                                       +{currentProfile.interests.length - 4}{' '}
                                       more
                                     </span>
@@ -337,19 +340,19 @@ const Discover = () => {
                               )}
 
                             {/* Action Buttons */}
-                            <div className="flex space-x-3">
+                            <div className="flex space-x-3 pt-2">
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handlePass();
                                 }}
                                 disabled={isPassing}
-                                className="flex-1 bg-white/90 backdrop-blur-sm text-gray-700 py-3 px-4 rounded-xl font-medium hover:bg-white transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center z-10"
+                                className="flex-1 bg-white/95 backdrop-blur-sm text-gray-700 py-3.5 px-4 rounded-xl font-semibold hover:bg-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center z-10 shadow-professional hover:shadow-professional-lg border border-white/30"
                               >
                                 {isPassing ? (
-                                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
                                 ) : (
-                                  <X className="h-5 w-5 mr-2" />
+                                  <X className="h-4 w-4 mr-2" />
                                 )}
                                 Pass
                               </button>
@@ -359,12 +362,12 @@ const Discover = () => {
                                   handleLike();
                                 }}
                                 disabled={isLiking}
-                                className="flex-1 bg-gradient-to-r from-red-600 to-pink-600 text-white py-3 px-4 rounded-xl font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center z-10"
+                                className="flex-1 bg-gradient-to-r from-red-600 to-pink-600 text-white py-3.5 px-4 rounded-xl font-semibold hover:shadow-professional-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center z-10 shadow-professional"
                               >
                                 {isLiking ? (
-                                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
                                 ) : (
-                                  <Heart className="h-5 w-5 mr-2" />
+                                  <Heart className="h-4 w-4 mr-2" />
                                 )}
                                 Like
                               </button>

@@ -71,8 +71,8 @@ const LocationIndicator: React.FC<LocationIndicatorProps> = ({
           onClick={() => setIsOpen(!isOpen)}
           className={`flex items-center space-x-1 px-3 py-2 text-sm rounded-lg transition-colors ${
             tempState || tempCity
-              ? 'bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+              ? 'bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-medium'
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100 font-medium'
           }`}
         >
           <MapPin className="h-4 w-4" />
@@ -90,7 +90,7 @@ const LocationIndicator: React.FC<LocationIndicatorProps> = ({
         {(tempState || tempCity) && (
           <button
             onClick={clearLocationFilter}
-            className="p-1 text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded transition-colors"
+            className="p-1 text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded transition-all duration-200"
             title="Clear location filter"
           >
             <X className="h-3 w-3" />
@@ -100,17 +100,17 @@ const LocationIndicator: React.FC<LocationIndicatorProps> = ({
 
       {/* Location Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 w-72 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+        <div className="absolute top-full left-0 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-professional-lg z-50">
           <div className="p-3 border-b border-gray-100">
             <div className="flex items-center space-x-2">
-              <h3 className="text-sm font-medium text-gray-900">
+              <h3 className="text-sm font-semibold text-gray-900 tracking-tight">
                 Filter by Location
               </h3>
-              <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
+              <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full font-medium">
                 Temporary
               </span>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 mt-1 font-normal">
               Filter profiles by location (clears when you leave this page)
             </p>
           </div>
@@ -118,7 +118,7 @@ const LocationIndicator: React.FC<LocationIndicatorProps> = ({
           <div className="max-h-64 overflow-y-auto">
             {/* Popular States */}
             <div className="p-2">
-              <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
                 Popular States
               </h4>
               <div className="space-y-1">
@@ -127,7 +127,7 @@ const LocationIndicator: React.FC<LocationIndicatorProps> = ({
                     <button
                       key={state}
                       onClick={() => handleLocationChange(state, '')}
-                      className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded flex items-center justify-between"
+                      className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg flex items-center justify-between transition-colors duration-200 font-medium"
                     >
                       <span>{state}</span>
                       {tempState === state && !tempCity && (
@@ -142,7 +142,7 @@ const LocationIndicator: React.FC<LocationIndicatorProps> = ({
             {/* Cities in selected state */}
             {tempState && cities.length > 0 && (
               <div className="p-2 border-t border-gray-100">
-                <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
                   Cities in {tempState}
                 </h4>
                 <div className="space-y-1 max-h-32 overflow-y-auto">
@@ -150,7 +150,7 @@ const LocationIndicator: React.FC<LocationIndicatorProps> = ({
                     <button
                       key={city}
                       onClick={() => handleLocationChange(tempState, city)}
-                      className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded flex items-center justify-between"
+                      className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-lg flex items-center justify-between transition-colors duration-200 font-medium"
                     >
                       <span>{city}</span>
                       {tempCity === city && (
@@ -166,7 +166,7 @@ const LocationIndicator: React.FC<LocationIndicatorProps> = ({
           <div className="p-3 border-t border-gray-100">
             <button
               onClick={clearLocationFilter}
-              className="w-full text-sm text-blue-600 hover:text-blue-700 font-medium"
+              className="w-full text-sm text-blue-600 hover:text-blue-700 font-semibold transition-colors duration-200"
             >
               Clear location filter
             </button>

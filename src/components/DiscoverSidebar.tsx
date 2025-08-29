@@ -91,82 +91,82 @@ const DiscoverSidebar: React.FC<DiscoverSidebarProps> = ({
   return (
     <div className="space-y-6">
       {/* Search Bar */}
-      <div className="bg-white rounded-2xl shadow-lg p-6">
-        <h3 className="text-base font-semibold text-gray-900 mb-3">
+      <div className="bg-white rounded-2xl shadow-professional-lg p-6 border border-gray-100 card-professional">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 tracking-tight">
           Search Profiles
         </h3>
         <SearchBar />
       </div>
 
       {/* Location Settings */}
-      <div className="bg-white rounded-2xl shadow-lg p-6">
-        <h3 className="text-base font-semibold text-gray-900 mb-3">Location</h3>
+      <div className="bg-white rounded-2xl shadow-professional-lg p-6 border border-gray-100 card-professional">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 tracking-tight">Location</h3>
         <LocationIndicator onLocationChange={onLocationFilterChange} />
       </div>
 
       {/* Profile Stats */}
-      <div className="bg-white rounded-2xl shadow-lg p-6">
-        <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center">
+      <div className="bg-white rounded-2xl shadow-professional-lg p-6 border border-gray-100 card-professional">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center tracking-tight">
           <TrendingUp className="h-4 w-4 mr-2 text-red-600" />
           Your Stats
         </h3>
 
         <div className="space-y-3">
           {/* Matches */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between py-1">
             <div className="flex items-center">
               <Heart className="h-4 w-4 text-red-600 mr-2" />
-              <span className="text-sm text-gray-700">Matches</span>
+              <span className="text-sm text-gray-700 font-medium">Matches</span>
             </div>
-            <span className="text-sm font-semibold text-gray-900">
+            <span className="text-sm font-bold text-gray-900">
               {matchCount}
             </span>
           </div>
 
           {/* Likes Received */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between py-1">
             <div className="flex items-center">
               <Eye className="h-4 w-4 text-blue-600 mr-2" />
-              <span className="text-sm text-gray-700">Likes Received</span>
+              <span className="text-sm text-gray-700 font-medium">Likes Received</span>
             </div>
-            <span className="text-sm font-semibold text-gray-900">
+            <span className="text-sm font-bold text-gray-900">
               {likesReceived}
             </span>
           </div>
 
           {/* Likes Given */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between py-1">
             <div className="flex items-center">
               <Heart className="h-4 w-4 text-pink-600 mr-2" />
-              <span className="text-sm text-gray-700">Likes Given</span>
+              <span className="text-sm text-gray-700 font-medium">Likes Given</span>
             </div>
-            <span className="text-sm font-semibold text-gray-900">
+            <span className="text-sm font-bold text-gray-900">
               {likesGiven}
             </span>
           </div>
 
           {/* Success Rate */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between py-1">
             <div className="flex items-center">
               <TrendingUp className="h-4 w-4 text-green-600 mr-2" />
-              <span className="text-sm text-gray-700">Success Rate</span>
+              <span className="text-sm text-gray-700 font-medium">Success Rate</span>
             </div>
-            <span className="text-sm font-semibold text-gray-900">
+            <span className="text-sm font-bold text-gray-900">
               {matchSuccessRate}%
             </span>
           </div>
 
           {/* Profile Completion */}
-          <div className="pt-2">
+          <div className="pt-3">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-gray-600">Profile Completion</span>
-              <span className="text-xs font-medium text-gray-900">
+              <span className="text-xs text-gray-600 font-medium">Profile Completion</span>
+              <span className="text-xs font-bold text-gray-900">
                 {profileCompletion}%
               </span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-1.5">
+            <div className="w-full bg-gray-200 rounded-full h-2">
               <div
-                className="bg-gradient-to-r from-red-600 to-pink-600 h-1.5 rounded-full transition-all duration-300"
+                className="bg-gradient-to-r from-red-600 to-pink-600 h-2 rounded-full transition-all duration-500"
                 style={{ width: `${profileCompletion}%` }}
               ></div>
             </div>
@@ -175,44 +175,44 @@ const DiscoverSidebar: React.FC<DiscoverSidebarProps> = ({
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-2xl shadow-lg p-6">
-        <h3 className="text-base font-semibold text-gray-900 mb-3">
+      <div className="bg-white rounded-2xl shadow-professional-lg p-6 border border-gray-100 card-professional">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 tracking-tight">
           Quick Actions
         </h3>
 
-        <div className="space-y-2">
+        <div className="space-y-1">
           {quickActions.map((action, index) => (
             <button
               key={index}
               onClick={action.action}
-              className="w-full flex items-center p-2.5 rounded-lg hover:bg-gray-50 transition-colors group"
+              className="w-full flex items-center p-3 rounded-lg hover:bg-gray-50 transition-all duration-200 group border border-transparent hover:border-gray-100"
             >
-              <action.icon className={`h-4 w-4 mr-2.5 ${action.color}`} />
-              <span className="text-sm text-gray-700 group-hover:text-gray-900">
+              <action.icon className={`h-4 w-4 mr-3 ${action.color}`} />
+              <span className="text-sm text-gray-700 group-hover:text-gray-900 font-medium">
                 {action.label}
               </span>
-              <ArrowRight className="h-3 w-3 ml-auto text-gray-400 group-hover:text-gray-600" />
+              <ArrowRight className="h-3 w-3 ml-auto text-gray-400 group-hover:text-gray-600 transition-colors duration-200" />
             </button>
           ))}
         </div>
       </div>
 
       {/* Discovery Tips */}
-      <div className="bg-white rounded-2xl shadow-lg p-6">
-        <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center">
+      <div className="bg-white rounded-2xl shadow-professional-lg p-6 border border-gray-100 card-professional">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center tracking-tight">
           <Lightbulb className="h-4 w-4 mr-2 text-yellow-600" />
           Tips for Success
         </h3>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           {tips.map((tip, index) => (
-            <div key={index} className="flex items-start space-x-2.5">
+            <div key={index} className="flex items-start space-x-3">
               <tip.icon className={`h-4 w-4 mt-0.5 ${tip.color}`} />
               <div>
-                <h4 className="text-sm font-medium text-gray-900">
+                <h4 className="text-sm font-semibold text-gray-900 tracking-tight">
                   {tip.title}
                 </h4>
-                <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                <p className="text-xs text-gray-600 mt-1.5 leading-relaxed font-normal">
                   {tip.description}
                 </p>
               </div>

@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         sans: [
+          'Poppins',
           'Inter',
           'ui-sans-serif',
           'system-ui',
@@ -19,21 +20,27 @@ export default {
         ]
       },
       fontSize: {
-        xs: ['0.75rem', { lineHeight: '1rem' }], // 12px
-        sm: ['0.875rem', { lineHeight: '1.25rem' }], // 14px
-        base: ['1rem', { lineHeight: '1.5rem' }], // 16px
-        lg: ['1.125rem', { lineHeight: '1.75rem' }], // 18px
-        xl: ['1.25rem', { lineHeight: '1.75rem' }], // 20px
-        '2xl': ['1.5rem', { lineHeight: '2rem' }], // 24px
-        '3xl': ['1.875rem', { lineHeight: '2.25rem' }], // 30px
-        '4xl': ['2.25rem', { lineHeight: '2.5rem' }] // 36px
+        xs: ['0.75rem', { lineHeight: '1.1rem', letterSpacing: '-0.01em' }],
+        sm: ['0.875rem', { lineHeight: '1.3rem', letterSpacing: '-0.01em' }],
+        base: ['1rem', { lineHeight: '1.5rem', letterSpacing: '-0.01em' }],
+        lg: ['1.125rem', { lineHeight: '1.6rem', letterSpacing: '-0.015em' }],
+        xl: ['1.25rem', { lineHeight: '1.7rem', letterSpacing: '-0.015em' }],
+        '2xl': ['1.5rem', { lineHeight: '1.9rem', letterSpacing: '-0.02em' }],
+        '3xl': ['1.875rem', { lineHeight: '2.1rem', letterSpacing: '-0.025em' }],
+        '4xl': ['2.25rem', { lineHeight: '2.4rem', letterSpacing: '-0.025em' }]
       },
       fontWeight: {
         light: '300',
         normal: '400',
         medium: '500',
         semibold: '600',
-        bold: '700'
+        bold: '700',
+        extrabold: '800'
+      },
+      boxShadow: {
+        'professional': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        'professional-lg': '0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        'professional-xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
       }
     }
   },
