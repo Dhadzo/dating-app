@@ -20,14 +20,16 @@ export default {
         ]
       },
       fontSize: {
-        xs: ['0.75rem', { lineHeight: '1.1rem', letterSpacing: '-0.01em' }],
-        sm: ['0.875rem', { lineHeight: '1.3rem', letterSpacing: '-0.01em' }],
-        base: ['1rem', { lineHeight: '1.5rem', letterSpacing: '-0.01em' }],
-        lg: ['1.125rem', { lineHeight: '1.6rem', letterSpacing: '-0.015em' }],
-        xl: ['1.25rem', { lineHeight: '1.7rem', letterSpacing: '-0.015em' }],
-        '2xl': ['1.5rem', { lineHeight: '1.9rem', letterSpacing: '-0.02em' }],
-        '3xl': ['1.875rem', { lineHeight: '2.1rem', letterSpacing: '-0.025em' }],
-        '4xl': ['2.25rem', { lineHeight: '2.4rem', letterSpacing: '-0.025em' }]
+        xs: ['0.75rem', { lineHeight: '1.125rem', letterSpacing: '-0.005em' }],
+        sm: ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '-0.006em' }],
+        base: ['1rem', { lineHeight: '1.5rem', letterSpacing: '-0.011em' }],
+        lg: ['1.125rem', { lineHeight: '1.75rem', letterSpacing: '-0.017em' }],
+        xl: ['1.25rem', { lineHeight: '1.875rem', letterSpacing: '-0.019em' }],
+        '2xl': ['1.5rem', { lineHeight: '2rem', letterSpacing: '-0.025em' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '-0.028em' }],
+        '4xl': ['2.25rem', { lineHeight: '2.5rem', letterSpacing: '-0.032em' }],
+        '5xl': ['3rem', { lineHeight: '3rem', letterSpacing: '-0.035em' }],
+        '6xl': ['3.75rem', { lineHeight: '3.75rem', letterSpacing: '-0.04em' }]
       },
       fontWeight: {
         light: '300',

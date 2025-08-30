@@ -12,22 +12,87 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.011em;
+  font-size: 0.9375rem;
+  line-height: 1.47;
+  font-weight: 400;
+  color: #374151;
 }
 
 /* Professional headings - using Roboto for consistency */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Roboto', 'Inter', sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  color: #1f2937;
+}
+
+/* Specific heading sizes for consistency */
+h1 {
+  font-size: 2rem;
+  line-height: 2.25rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: 1.75rem;
+  line-height: 2rem;
   font-weight: 600;
   letter-spacing: -0.025em;
-  line-height: 1.2;
+}
+
+h3 {
+  font-size: 1.375rem;
+  line-height: 1.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+h4 {
+  font-size: 1.125rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+h5 {
+  font-size: 1rem;
+  line-height: 1.375rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+/* LinkedIn-style text elements */
+.text-linkedin-body {
+  font-size: 0.9375rem;
+  line-height: 1.47;
+  font-weight: 400;
+  letter-spacing: -0.011em;
+  color: #374151;
+}
+
+.text-linkedin-caption {
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  font-weight: 400;
+  letter-spacing: -0.008em;
+  color: #6b7280;
+}
+
+.text-linkedin-small {
+  font-size: 0.75rem;
+  line-height: 1.125;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  color: #9ca3af;
 }
 
 /* Professional button styling - using Roboto for consistency */
 .btn-professional {
   font-family: 'Roboto', sans-serif;
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-weight: 400;
+  font-size: 0.9375rem;
+  letter-spacing: -0.008em;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -37,57 +102,53 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Professional card styling */
 .card-professional {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
 }
 
 .card-professional:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
 }
 
 /* Enhanced professional shadows */
 .shadow-professional {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
 .shadow-professional-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .shadow-professional-xl {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Smooth gradient backgrounds */
-.bg-gradient-professional {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+/* LinkedIn-style subtle gradients */
+.bg-linkedin-subtle {
+  background: linear-gradient(135deg, #fafbfc 0%, #f3f4f6 100%);
 }
 
-/* Enhanced button styling */
-.btn-professional { /* Ensure this uses Roboto as well */
+.bg-linkedin-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(229, 231, 235, 0.5);
+}
+
+/* LinkedIn-style button */
+.btn-linkedin {
   font-family: 'Roboto', sans-serif;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: -0.008em;
+  transition: all 0.15s ease-in-out;
+  border-radius: 0.5rem;
 }
 
-.btn-professional::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.btn-professional:hover::before {
-  left: 100%;
+.btn-linkedin:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 /* Disable all scrolling animations and transitions */
