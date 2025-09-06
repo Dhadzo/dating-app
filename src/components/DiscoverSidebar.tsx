@@ -89,98 +89,84 @@ const DiscoverSidebar: React.FC<DiscoverSidebarProps> = ({
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="h-full overflow-y-auto space-y-4 pr-2">
       {/* Search Bar */}
-      <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-professional-xl p-8 border border-gray-100/50">
-        <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-          <div className="w-2.5 h-2.5 bg-gradient-to-r from-red-500 to-pink-500 rounded-full mr-4"></div>
-          Search Profiles
-        </h3>
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
         <SearchBar />
       </div>
 
       {/* Location Settings */}
-      <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-professional-xl p-8 border border-gray-100/50">
-        <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-          <div className="w-2.5 h-2.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mr-4"></div>
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
+          <MapPin className="h-4 w-4 text-gray-600 mr-2" />
           Location
         </h3>
         <LocationIndicator onLocationChange={onLocationFilterChange} />
       </div>
 
       {/* Profile Stats */}
-      <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-professional-xl p-8 border border-gray-100/50">
-        <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-          <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-2.5 rounded-xl mr-4">
-            <TrendingUp className="h-4 w-4 text-white" />
-          </div>
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
+          <TrendingUp className="h-4 w-4 text-gray-600 mr-2" />
           Your Stats
         </h3>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {/* Matches */}
-          <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-gray-50/80 transition-colors duration-200">
+          <div className="flex items-center justify-between py-2">
             <div className="flex items-center">
-              <div className="bg-red-50 p-2.5 rounded-xl mr-4">
-                <Heart className="h-4 w-4 text-red-600" />
-              </div>
-              <span className="text-gray-800 font-medium">Matches</span>
+              <Heart className="h-4 w-4 text-red-600 mr-2" />
+              <span className="text-gray-700 text-sm">Matches</span>
             </div>
-            <span className="text-lg font-semibold text-gray-900 bg-gray-50 px-4 py-2 rounded-xl">
+            <span className="text-sm font-medium text-gray-900 bg-gray-100 px-2 py-1 rounded">
               {matchCount}
             </span>
           </div>
 
           {/* Likes Received */}
-          <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-gray-50/80 transition-colors duration-200">
+          <div className="flex items-center justify-between py-2">
             <div className="flex items-center">
-              <div className="bg-blue-50 p-2.5 rounded-xl mr-4">
-                <Eye className="h-4 w-4 text-blue-600" />
-              </div>
-              <span className="text-gray-800 font-medium">Likes Received</span>
+              <Eye className="h-4 w-4 text-blue-600 mr-2" />
+              <span className="text-gray-700 text-sm">Likes Received</span>
             </div>
-            <span className="text-lg font-semibold text-gray-900 bg-gray-50 px-4 py-2 rounded-xl">
+            <span className="text-sm font-medium text-gray-900 bg-gray-100 px-2 py-1 rounded">
               {likesReceived}
             </span>
           </div>
 
           {/* Likes Given */}
-          <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-gray-50/80 transition-colors duration-200">
+          <div className="flex items-center justify-between py-2">
             <div className="flex items-center">
-              <div className="bg-pink-50 p-2.5 rounded-xl mr-4">
-                <Heart className="h-4 w-4 text-pink-600" />
-              </div>
-              <span className="text-gray-800 font-medium">Likes Given</span>
+              <Heart className="h-4 w-4 text-pink-600 mr-2" />
+              <span className="text-gray-700 text-sm">Likes Given</span>
             </div>
-            <span className="text-lg font-semibold text-gray-900 bg-gray-50 px-4 py-2 rounded-xl">
+            <span className="text-sm font-medium text-gray-900 bg-gray-100 px-2 py-1 rounded">
               {likesGiven}
             </span>
           </div>
 
           {/* Success Rate */}
-          <div className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-gray-50/80 transition-colors duration-200">
+          <div className="flex items-center justify-between py-2">
             <div className="flex items-center">
-              <div className="bg-green-50 p-2.5 rounded-xl mr-4">
-                <TrendingUp className="h-4 w-4 text-green-600" />
-              </div>
-              <span className="text-gray-800 font-medium">Success Rate</span>
+              <TrendingUp className="h-4 w-4 text-green-600 mr-2" />
+              <span className="text-gray-700 text-sm">Success Rate</span>
             </div>
-            <span className="text-lg font-semibold text-gray-900 bg-gray-50 px-4 py-2 rounded-xl">
+            <span className="text-sm font-medium text-gray-900 bg-gray-100 px-2 py-1 rounded">
               {matchSuccessRate}%
             </span>
           </div>
 
           {/* Profile Completion */}
-          <div className="pt-5 border-t border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-gray-700 font-medium">Profile Completion</span>
-              <span className="text-sm font-semibold text-gray-900 bg-gray-50 px-3 py-1.5 rounded-xl">
+          <div className="pt-3 border-t border-gray-100">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-gray-700 text-sm">Profile Completion</span>
+              <span className="text-sm font-medium text-gray-900 bg-gray-100 px-2 py-1 rounded">
                 {profileCompletion}%
               </span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-3.5 overflow-hidden">
+            <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-red-600 to-pink-600 h-3.5 rounded-full transition-all duration-700 shadow-sm"
+                className="bg-red-600 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${profileCompletion}%` }}
               ></div>
             </div>
@@ -189,53 +175,49 @@ const DiscoverSidebar: React.FC<DiscoverSidebarProps> = ({
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-professional-xl p-8 border border-gray-100/50">
-        <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-          <div className="w-2.5 h-2.5 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full mr-4"></div>
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
+          <Settings className="h-4 w-4 text-gray-600 mr-2" />
           Quick Actions
         </h3>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {quickActions.map((action, index) => (
             <button
               key={index}
               onClick={action.action}
-              className="w-full flex items-center p-4 rounded-xl hover:bg-gray-50/80 transition-all duration-300 group border border-transparent hover:border-gray-200/50 hover:shadow-professional"
+              className="w-full flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors group"
             >
-              <div className="bg-gray-50 group-hover:bg-white p-2.5 rounded-xl mr-4 transition-colors duration-200">
-                <action.icon className={`h-4 w-4 ${action.color}`} />
-              </div>
-              <span className="text-gray-800 group-hover:text-gray-900 font-medium">
+              <action.icon className={`h-4 w-4 ${action.color} mr-3`} />
+              <span className="text-gray-700 text-sm font-medium">
                 {action.label}
               </span>
-              <ArrowRight className="h-4 w-4 ml-auto text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1.5 transition-all duration-200" />
+              <ArrowRight className="h-3 w-3 ml-auto text-gray-400 group-hover:text-gray-600 transition-colors" />
             </button>
           ))}
         </div>
       </div>
 
       {/* Discovery Tips */}
-      <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-professional-xl p-8 border border-gray-100/50">
-        <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
-          <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-2.5 rounded-xl mr-4">
-            <Lightbulb className="h-4 w-4 text-white" />
-          </div>
-          Tips for Success
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center">
+          <Lightbulb className="h-4 w-4 text-yellow-600 mr-2" />
+          Tips
         </h3>
 
-        <div className="space-y-6">
-          {tips.map((tip, index) => (
-            <div key={index} className="flex items-start space-x-4 p-4 rounded-xl hover:bg-gray-50/50 transition-colors duration-200">
-              <div className="bg-gray-50 p-2.5 rounded-xl mt-0.5">
-                <tip.icon className={`h-4 w-4 ${tip.color}`} />
-              </div>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-2">
+        <div className="space-y-3">
+          {tips.slice(0, 2).map((tip, index) => (
+            <div key={index} className="p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start space-x-2">
+                <tip.icon className={`h-4 w-4 ${tip.color} mt-0.5 flex-shrink-0`} />
+                <div>
+                  <h4 className="font-medium text-gray-900 text-sm mb-1">
                   {tip.title}
                 </h4>
-                <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-xs text-gray-600">
                   {tip.description}
                 </p>
+                </div>
               </div>
             </div>
           ))}
