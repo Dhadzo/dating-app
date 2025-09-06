@@ -1,4 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  useInfiniteQuery
+} from '@tanstack/react-query';
 import { supabase } from '../lib/supabase';
 
 export interface Match {
@@ -89,6 +94,99 @@ export const useMatchMessages = (matchId: string | undefined) => {
   });
 };
 
+// PAGINATED VERSION - Phase 3 Message Pagination
+// This version implements infinite scroll pagination for chat messages
+export const useMatchMessagesPaginated = (
+  matchId: string | undefined,
+  pageSize: number = 20
+) => {
+  return useInfiniteQuery({
+    queryKey: ['match-messages-paginated', matchId],
+    queryFn: async ({ pageParam = 0 }) => {
+      if (!matchId) throw new Error('No match ID provided');
+
+      console.log(`📨 Loading messages page ${pageParam} for match ${matchId}`);
+
+      // Calculate offset for pagination
+      // We load from newest to oldest, so we need to reverse the pagination
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('match_id', matchId)
+        .order('created_at', { ascending: false }) // Newest first for pagination
+        .range(pageParam * pageSize, (pageParam + 1) * pageSize - 1);
+
+      if (error) {
+        console.error('Paginated messages query error:', error);
+        throw error;
+      }
+
+      // Reverse the data to maintain chronological order (oldest to newest)
+      const messages = (data || []).reverse();
+
+      console.log(
+        `📨 Loaded ${messages.length} messages for page ${pageParam}`
+      );
+
+      return {
+        messages,
+        nextPage: data && data.length === pageSize ? pageParam + 1 : undefined,
+        hasMore: data && data.length === pageSize,
+        totalLoaded: (pageParam + 1) * pageSize
+      };
+    },
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    enabled: !!matchId,
+    staleTime: 30 * 1000, // 30 seconds - messages change frequently
+    cacheTime: 10 * 60 * 1000, // 10 minutes - keep recent messages cached
+    retry: (failureCount, error) => {
+      if (failureCount < 2) return true;
+      console.warn('Message pagination failed, retries exhausted');
+      return false;
+    }
+  });
+};
+
+// SMART HOOK - Uses pagination with fallback to original query
+export const useMatchMessagesSmart = (
+  matchId: string | undefined,
+  pageSize: number = 20
+) => {
+  // Try paginated first
+  const paginatedQuery = useMatchMessagesPaginated(matchId, pageSize);
+
+  // Fallback to original if paginated fails
+  const originalQuery = useMatchMessages(matchId);
+
+  // Use paginated if it's successful, otherwise fall back to original
+  const shouldUsePaginated = !paginatedQuery.error;
+
+  if (shouldUsePaginated) {
+    return {
+      ...paginatedQuery,
+      // Flatten pages for compatibility with existing components
+      data: paginatedQuery.data?.pages.flatMap((page) => page.messages) || [],
+      // Add pagination helpers
+      loadMore: paginatedQuery.fetchNextPage,
+      hasMore: paginatedQuery.hasNextPage,
+      isLoadingMore: paginatedQuery.isFetchingNextPage,
+      totalLoaded:
+        paginatedQuery.data?.pages.reduce(
+          (total, page) => total + page.messages.length,
+          0
+        ) || 0
+    };
+  }
+
+  return {
+    ...originalQuery,
+    loadMore: () => {},
+    hasMore: false,
+    isLoadingMore: false,
+    totalLoaded: originalQuery.data?.length || 0
+  };
+};
+
 // Send a message
 export const useSendMessage = () => {
   const queryClient = useQueryClient();
@@ -117,11 +215,66 @@ export const useSendMessage = () => {
       return data as Message;
     },
     onSuccess: (newMessage, { matchId }) => {
-      // Optimistically update the messages cache
+      console.log(
+        '📨 Message sent successfully:',
+        newMessage.id,
+        'for match:',
+        matchId
+      );
+
+      // Optimistically update the paginated messages cache
+      queryClient.setQueryData(
+        ['match-messages-paginated', matchId],
+        (old: any) => {
+          if (!old || !old.pages || old.pages.length === 0) {
+            // If no data yet, create initial page
+            return {
+              pages: [
+                {
+                  messages: [newMessage],
+                  nextPage: undefined,
+                  hasMore: false,
+                  totalLoaded: 1
+                }
+              ],
+              pageParams: [0]
+            };
+          }
+
+          // Check if message already exists to avoid duplicates
+          const allMessages = old.pages.flatMap((page) => page.messages);
+          if (allMessages.find((msg: any) => msg.id === newMessage.id)) {
+            return old; // Message already exists, don't add duplicate
+          }
+
+          // Add new message to the first page (most recent)
+          const updatedPages = [...old.pages];
+          if (updatedPages[0]) {
+            updatedPages[0] = {
+              ...updatedPages[0],
+              messages: [...updatedPages[0].messages, newMessage],
+              totalLoaded: updatedPages[0].totalLoaded + 1
+            };
+          }
+
+          return {
+            ...old,
+            pages: updatedPages
+          };
+        }
+      );
+
+      // Also update the original query for fallback compatibility
       queryClient.setQueryData(
         ['match-messages', matchId],
         (old: Message[] | undefined) => {
           if (!old) return [newMessage];
+
+          // Check if message already exists to avoid duplicates
+          if (old.find((msg) => msg.id === newMessage.id)) {
+            return old; // Message already exists, don't add duplicate
+          }
+
           return [...old, newMessage];
         }
       );

@@ -20,15 +20,31 @@ import ResponsiveLayout from './components/ResponsiveLayout';
 import Header from './components/Header';
 import LogoutOverlay from './components/LogoutOverlay';
 import LoginOverlay from './components/LoginOverlay';
+import ProfileDiscoveryTest from './components/ProfileDiscoveryTest';
+import PaginationTest from './components/PaginationTest';
 
-// Create a client
+// Create a client with advanced caching configuration
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      cacheTime: 10 * 60 * 1000, // 10 minutes
-      retry: 3,
-      refetchOnWindowFocus: false
+      staleTime: 5 * 60 * 1000, // 5 minutes default
+      cacheTime: 10 * 60 * 1000, // 10 minutes default
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      retry: (failureCount, error) => {
+        // Smart retry logic
+        if (failureCount < 2) return true;
+        // Don't retry on 4xx errors (client errors)
+        if (error?.status >= 400 && error?.status < 500) return false;
+        return false;
+      }
+    },
+    mutations: {
+      retry: (failureCount, error) => {
+        // Retry mutations less aggressively
+        if (failureCount < 1) return true;
+        return false;
+      }
     }
   }
 });
@@ -69,6 +85,11 @@ function App() {
                     </ProtectedRoute>
                   }
                 >
+                  <Route
+                    path="profile-discovery-test"
+                    element={<ProfileDiscoveryTest />}
+                  />
+                  <Route path="pagination-test" element={<PaginationTest />} />
                   <Route index element={<Discover />} />
                   <Route path="discover" element={<Discover />} />
                   <Route path="matches" element={<Matches />} />

@@ -12,7 +12,7 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import {
   useMatches,
-  useMatchMessages,
+  useMatchMessagesSmart,
   useSendMessage,
   useMarkMessagesAsRead
 } from '../hooks/useMatches';
@@ -33,10 +33,15 @@ const Matches = () => {
   } = useUIStore();
 
   const [chatMessage, setChatMessage] = useState('');
+  const [isTabSwitched, setIsTabSwitched] = useState(false);
+  const previousMessageCountRef = useRef(0);
+  const previousChatIdRef = useRef<string | null>(null);
 
-  // Refs for auto-scrolling
+  // Refs for auto-scrolling and infinite scroll
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const mobileMessagesContainerRef = useRef<HTMLDivElement>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   // React Query hooks for data fetching
   const {
@@ -48,8 +53,12 @@ const Matches = () => {
   const {
     data: chatMessages = [],
     isLoading: messagesLoading,
-    error: messagesError
-  } = useMatchMessages(selectedChatMatch?.matchId || undefined);
+    error: messagesError,
+    loadMore,
+    hasMore,
+    isLoadingMore,
+    totalLoaded
+  } = useMatchMessagesSmart(selectedChatMatch?.matchId || undefined, 20);
 
   // Get last messages for all matches
   const matchIds = matches.map((match) => match.id);
@@ -62,6 +71,55 @@ const Matches = () => {
   // Real-time subscription for messages in the selected chat
   useMessagesRealtime(selectedChatMatch?.matchId, user?.id);
 
+  // Infinite scroll effect for loading older messages
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && hasMore && !isLoadingMore) {
+          console.log('📨 Loading more messages...');
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasMore, isLoadingMore, loadMore]);
+
+  // Handle tab switching to prevent chat from closing
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setIsTabSwitched(true);
+      } else {
+        // Reset tab switch state when user comes back
+        setTimeout(() => setIsTabSwitched(false), 100);
+      }
+    };
+
+    const handleFocus = () => {
+      setIsTabSwitched(false);
+    };
+
+    const handleBlur = () => {
+      setIsTabSwitched(true);
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('blur', handleBlur);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('blur', handleBlur);
+    };
+  }, []);
+
   // Clear selected chat match if it no longer exists in matches
   useEffect(() => {
     if (selectedChatMatch && matches.length > 0) {
@@ -69,8 +127,13 @@ const Matches = () => {
         (match) => match.id === selectedChatMatch.matchId
       );
       if (!matchStillExists) {
+        console.log('🗑️ Match deleted, closing chat');
         setSelectedChatMatch(null);
       }
+    } else if (selectedChatMatch && matches.length === 0) {
+      // If no matches exist at all, close the chat
+      console.log('🗑️ No matches exist, closing chat');
+      setSelectedChatMatch(null);
     }
   }, [matches, selectedChatMatch, setSelectedChatMatch]);
 
@@ -81,18 +144,21 @@ const Matches = () => {
     }
   }, [selectedChatMatch?.matchId]);
 
-  // Auto-scroll to latest message
+  // Auto-scroll to latest message (works for both mobile and desktop)
   const scrollToBottom = (smooth: boolean = true) => {
-    if (messagesContainerRef.current) {
+    // Try desktop container first, then mobile container
+    const container =
+      messagesContainerRef.current || mobileMessagesContainerRef.current;
+
+    if (container) {
       if (smooth) {
-        messagesContainerRef.current.scrollTo({
-          top: messagesContainerRef.current.scrollHeight,
+        container.scrollTo({
+          top: container.scrollHeight,
           behavior: 'smooth'
         });
       } else {
         // Force immediate scroll to bottom without any animation
-        messagesContainerRef.current.scrollTop =
-          messagesContainerRef.current.scrollHeight;
+        container.scrollTop = container.scrollHeight;
       }
     }
   };
@@ -100,10 +166,42 @@ const Matches = () => {
   // Scroll to bottom when messages change or chat is selected
   useEffect(() => {
     if (chatMessages.length > 0) {
-      // For initial load, scroll immediately without animation
-      // For new messages, use smooth scroll
-      const isNewMessage = chatMessages.length > 1;
-      scrollToBottom(isNewMessage);
+      const currentMessageCount = chatMessages.length;
+      const previousMessageCount = previousMessageCountRef.current;
+      const currentChatId = selectedChatMatch?.matchId;
+      const previousChatId = previousChatIdRef.current;
+
+      // Only scroll if there's actually a new message or chat changed
+      const hasNewMessage = currentMessageCount > previousMessageCount;
+      const chatChanged = currentChatId !== previousChatId;
+
+      if (hasNewMessage || chatChanged) {
+        // For initial load, scroll immediately without animation
+        // For new messages, use smooth scroll
+        const isNewMessage = hasNewMessage && currentMessageCount > 1;
+
+        // Add a small delay for mobile to ensure DOM is fully rendered
+        const delay = isNewMessage ? 200 : 100;
+
+        setTimeout(() => {
+          scrollToBottom(isNewMessage);
+
+          // Additional scroll attempt for mobile (more aggressive)
+          if (mobileMessagesContainerRef.current) {
+            setTimeout(() => {
+              const container = mobileMessagesContainerRef.current;
+              if (container) {
+                // Force scroll to absolute bottom
+                container.scrollTop = container.scrollHeight;
+              }
+            }, 50);
+          }
+        }, delay);
+      }
+
+      // Update the refs
+      previousMessageCountRef.current = currentMessageCount;
+      previousChatIdRef.current = currentChatId;
     }
   }, [chatMessages, selectedChatMatch?.matchId]);
 
@@ -111,9 +209,22 @@ const Matches = () => {
   useEffect(() => {
     if (selectedChatMatch?.matchId && chatMessages.length > 0) {
       // Use requestAnimationFrame for perfect timing after DOM is rendered
+      // Add extra delay for mobile devices
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          scrollToBottom(false); // No animation for initial load
+          setTimeout(() => {
+            scrollToBottom(false); // No animation for initial load
+
+            // Additional mobile scroll attempt
+            if (mobileMessagesContainerRef.current) {
+              setTimeout(() => {
+                const container = mobileMessagesContainerRef.current;
+                if (container) {
+                  container.scrollTop = container.scrollHeight;
+                }
+              }, 100);
+            }
+          }, 100); // Increased delay for mobile
         });
       });
     }
@@ -148,6 +259,14 @@ const Matches = () => {
         senderId: user.id,
         content: messageText
       });
+
+      // Force scroll to bottom after sending message (for mobile)
+      setTimeout(() => {
+        if (mobileMessagesContainerRef.current) {
+          const container = mobileMessagesContainerRef.current;
+          container.scrollTop = container.scrollHeight;
+        }
+      }, 100);
     } catch (error) {
       console.error('Error sending message:', error);
       // Could add toast notification here
@@ -332,6 +451,18 @@ const Matches = () => {
                     <p className="text-sm text-green-600">Online now</p>
                   </div>
                   <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => {
+                        if (mobileMessagesContainerRef.current) {
+                          const container = mobileMessagesContainerRef.current;
+                          container.scrollTop = container.scrollHeight;
+                        }
+                      }}
+                      className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+                      title="Scroll to bottom"
+                    >
+                      <MessageCircle className="h-5 w-5" />
+                    </button>
                     <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors">
                       <Phone className="h-5 w-5" />
                     </button>
@@ -347,7 +478,7 @@ const Matches = () => {
 
               {/* Mobile Messages Area */}
               <div
-                ref={messagesContainerRef}
+                ref={mobileMessagesContainerRef}
                 className="messages-container flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4 bg-gray-50"
               >
                 {messagesLoading ? (
@@ -391,6 +522,25 @@ const Matches = () => {
                         </div>
                       </div>
                     ))}
+
+                    {/* Load More Trigger for Infinite Scroll */}
+                    {hasMore && (
+                      <div ref={loadMoreRef} className="text-center py-4">
+                        {isLoadingMore ? (
+                          <div className="flex items-center justify-center">
+                            <Loader2 className="h-5 w-5 animate-spin text-gray-500" />
+                            <span className="ml-2 text-sm text-gray-500">
+                              Loading older messages...
+                            </span>
+                          </div>
+                        ) : (
+                          <p className="text-sm text-gray-400">
+                            Scroll up to load older messages
+                          </p>
+                        )}
+                      </div>
+                    )}
+
                     {/* Invisible div for auto-scroll */}
                     <div ref={messagesEndRef} />
                   </>
@@ -523,6 +673,11 @@ const Matches = () => {
                           {selectedChatMatch.name}
                         </h3>
                         <p className="text-sm text-green-600">Online now</p>
+                        {/* Debug info for pagination */}
+                        <p className="text-xs text-gray-400">
+                          {totalLoaded} messages loaded{' '}
+                          {hasMore ? '(more available)' : '(all loaded)'}
+                        </p>
                       </div>
                     </div>
 
@@ -588,6 +743,25 @@ const Matches = () => {
                           </div>
                         </div>
                       ))}
+
+                      {/* Load More Trigger for Infinite Scroll - Desktop */}
+                      {hasMore && (
+                        <div ref={loadMoreRef} className="text-center py-4">
+                          {isLoadingMore ? (
+                            <div className="flex items-center justify-center">
+                              <Loader2 className="h-5 w-5 animate-spin text-gray-500" />
+                              <span className="ml-2 text-sm text-gray-500">
+                                Loading older messages...
+                              </span>
+                            </div>
+                          ) : (
+                            <p className="text-sm text-gray-400">
+                              Scroll up to load older messages
+                            </p>
+                          )}
+                        </div>
+                      )}
+
                       {/* Invisible div for auto-scroll */}
                       <div ref={messagesEndRef} />
                     </>
