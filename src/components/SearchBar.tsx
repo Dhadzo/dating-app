@@ -119,19 +119,19 @@ const SearchBar: React.FC<SearchBarProps> = ({ className = '' }) => {
     <div ref={searchRef} className={`relative ${className}`}>
       {/* Search Input */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
         <input
           type="text"
           placeholder="Search profiles..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.trim() && setIsOpen(true)}
-          className="w-full pl-10 pr-10 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 text-sm font-medium transition-all duration-200 hover:bg-white hover:border-gray-300"
+          className="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:ring-1 focus:ring-red-500 focus:border-red-500 bg-white text-sm transition-all"
         />
         {query && (
           <button
             onClick={clearSearch}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
@@ -140,53 +140,53 @@ const SearchBar: React.FC<SearchBarProps> = ({ className = '' }) => {
 
       {/* Search Results Dropdown */}
       {isOpen && (results.length > 0 || isLoading) && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-professional-lg z-50 max-h-80 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto">
           {isLoading ? (
-            <div className="p-6 text-center text-gray-500">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-red-600 mx-auto mb-3"></div>
-              <p className="text-sm font-medium">Searching...</p>
+            <div className="p-4 text-center text-gray-500">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600 mx-auto mb-2"></div>
+              <p className="text-xs">Searching...</p>
             </div>
           ) : results.length > 0 ? (
-            <div className="py-1">
+            <div className="py-2">
               {results.map((result) => (
                 <button
                   key={result.id}
                   onClick={() => handleResultClick(result)}
-                  className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 transition-colors duration-200 border-b border-gray-50 last:border-b-0"
+                  className="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center space-x-3 transition-colors"
                 >
                   <div className="flex-shrink-0">
                     {result.photos && result.photos.length > 0 ? (
                       <img
                         src={result.photos[0]}
                         alt={`${result.first_name} ${result.last_name}`}
-                        className="w-10 h-10 rounded-full object-cover border border-gray-200"
+                        className="w-8 h-8 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center border border-gray-200">
-                        <User className="h-5 w-5 text-gray-400" />
+                      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                        <User className="h-4 w-4 text-gray-400" />
                       </div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-gray-900 truncate tracking-tight">
+                    <div className="font-medium text-gray-900 truncate text-sm">
                       {result.first_name} {result.last_name}
                     </div>
-                    <div className="text-sm text-gray-500 flex items-center font-normal">
-                      <MapPin className="h-3 w-3 mr-1" />
+                    <div className="text-xs text-gray-500 flex items-center">
+                      <MapPin className="h-3 w-3 mr-1 flex-shrink-0" />
                       {result.city && result.state
                         ? `${result.city}, ${result.state}`
                         : 'Location hidden'}
                     </div>
                   </div>
-                  <div className="text-sm text-gray-400 font-medium">
+                  <div className="text-xs text-gray-400">
                     {result.age ? result.age : 'Age hidden'}
                   </div>
                 </button>
               ))}
             </div>
           ) : (
-            <div className="p-6 text-center text-gray-500">
-              <p className="text-sm font-medium">No profiles found</p>
+            <div className="p-4 text-center text-gray-500">
+              <p className="text-xs">No profiles found</p>
             </div>
           )}
         </div>

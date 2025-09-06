@@ -23,7 +23,7 @@ const ResponsiveLayout = () => {
         {/* Main Content Area */}
         <div className="flex-1 lg:ml-72">
           {/* Content with bottom padding for mobile bottom nav and top padding for fixed header */}
-          <div className="pb-16 lg:pb-0 pt-14 sm:pt-16">
+          <div className="pb-16 lg:pb-0 pt-12 sm:pt-14">
             <Outlet />
           </div>
         </div>
